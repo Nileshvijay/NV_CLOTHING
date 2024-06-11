@@ -11,7 +11,7 @@ const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const fetchCart = async () => {
+    const fetchCart = async () => {akjkjkjkjgksgjk
       const token = localStorage.getItem('token');
       if (token) {
         try {

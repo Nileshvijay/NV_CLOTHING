@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/NV.png';
@@ -25,6 +25,31 @@ const Navbar = () => {
 
   const handleMouseLeave = () => {
     setIsMenuOpen(false);
+  };
+
+  const navigate = useNavigate(); // React Router hook to programmatically navigate
+  const isAuthenticated = !!localStorage.getItem('token'); // Check if token is in local storage
+
+  const handleLogout = async () => {
+    // Remove token from local storage
+    localStorage.removeItem('token');
+
+    try {
+      // Send a POST request to the logout API endpoint
+      const response = await fetch('http://localhost:8080/api/user/logout', {
+        method: 'POST', // Specifies the HTTP method
+        headers: { 'Content-Type': 'application/json' }, // Specifies the format of the request body
+        credentials: 'include', // Ensures cookies are sent with the request
+      });
+
+      if (response.ok) {
+        navigate('/login');
+      } else {
+        console.error('Failed to log out');
+      }
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return (
@@ -104,13 +129,19 @@ const Navbar = () => {
                       <strong style={{ fontSize: '14px' }}>Welcome</strong><br />
                       <span style={{ fontSize: '13px' }}>To access account and manage orders</span>
                     </p>
-                    <NavLink to="/login" className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>LOGIN</NavLink>
-                    <NavLink to="/register" className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>SIGNUP</NavLink>
+                    {isAuthenticated ? (
+                      <button onClick={handleLogout} className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>LOGOUT</button>
+                    ) : (
+                      <>
+                        <NavLink to="/login" className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>LOGIN</NavLink>
+                        <NavLink to="/register" className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>SIGNUP</NavLink>
+                      </>
+                    )}
                     <NavLink to="/admindashboard" className="btn btn-outline-primary" style={{ marginLeft: '10px', padding: '5px' }}>AdminDashboard</NavLink>
                     <NavLink to="/cart" style={{ marginLeft: '10px', padding: '5px' }}>
                       <button className="btn product-info-add-to-cart-btn mt-4">
-                        <FontAwesomeIcon icon={faCartPlus} className="cart-icon"  style = {{fontSize: '30px'}}/>
-                     
+                        <FontAwesomeIcon icon={faCartPlus} className="cart-icon" style={{ fontSize: '30px' }} />
+
                       </button>
                     </NavLink>
                   </ul>

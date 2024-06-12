@@ -1,4 +1,4 @@
-
+const router = require('../index')
 const UserModel = require('../model/UserModel')
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 
 
 const createUser= (req,res) =>{
-  const {name, email, age, mobile, password} = req.body; 
+  const {name, email, age, mobile, password,role} = req.body; 
   // console.log(req.body) 
 
   bcrypt.hash(password, 10)
@@ -49,7 +49,7 @@ const loginUser = (req, res) => {
 };
 
 const logoutUser = (req, res) => {
-  
+  res.clearCookie('token');
   res.json({ message: 'User logged out successfully' });
 };
 
@@ -64,7 +64,7 @@ const forgotPassword = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, "jwt_secret_key", { expiresIn: "1d" });
 
-     const  transporter = nodemailer.createTransport({
+    var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'youremail@gmail.com',
@@ -72,7 +72,7 @@ const forgotPassword = async (req, res) => {
       }
     });
 
-    const mailOptions = {
+    var mailOptions = {
       from: 'youremail@gmail.com',
       to: user.email,  // corrected the recipient email
       subject: 'Reset your password',
@@ -149,55 +149,4 @@ module.exports={
   deleteUserById,
   updateUserRole
 }
-
-
-// const createUser = (req,res)=>{
-//   const {name, age, email, password,mobile} = req.body;
-//       bcrypt.hash(password, 10)
-//       .then(hash => {
-//           UserModel.create({name, age, email,mobile, password:hash})
-//           .then(user => res.json(user))
-//           .catch(err => res.json(err))
-//       }).catch(err => console.log(err.message))
-// }
-
-
-
-
-// const loginUser = (req, res) => {
-//   const { email, password } = req.body;
-//   console.log(req.body);
-
-//   // Find user by email
-//   UserModel.findOne({ email })
-//     .then(user => {
-//       if (!user) {
-//         // User not found
-//         return res.status(401).json({ message: 'Unauthorized' });
-//       }
-       
-//       // Check if password matches
-//       bcrypt.compare(password, user.password)
-//         .then(isPasswordValid => {
-//           if (!isPasswordValid) {
-//             // Incorrect password
-//             return res.status(401).json({ message: 'Unauthorized' });
-//           }
-
-//           // Generate JWT token
-//           const token = jwt.sign({ email: user.email, role: user.role }, 'yourSecretKey', { expiresIn: '1h' });
-//           return res.json({ token });
-//         })
-//         .catch(err => {
-//           console.error(err);
-//           return res.status(500).json({ message: 'Internal Server Error' });
-//         });
-//     })
-//     .catch(err => {
-//       console.error(err);
-//       return res.status(500).json({ message: 'Internal Server Error' });
-//     });
-// };
-
-// module.exports = {createUser , loginUser};
 

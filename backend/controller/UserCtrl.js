@@ -2,7 +2,7 @@
 const UserModel = require('../model/UserModel')
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken")
-
+const nodemailer = require("nodemailer")
 
 
 const createUser= (req,res) =>{
@@ -48,6 +48,7 @@ const loginUser = (req, res) => {
     });
 };
 
+
 const logoutUser = (req, res) => {
   
   res.json({ message: 'User logged out successfully' });
@@ -62,18 +63,18 @@ const forgotPassword = async (req, res) => {
       return res.send({ status: "User not existed" });
     }
 
-    const token = jwt.sign({ id: user._id }, "jwt_secret_key", { expiresIn: "1d" });
+    const token = jwt.sign({ id: user._id }, 'yourSecretKey', { expiresIn: "1d" });
 
      const  transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'youremail@gmail.com',
-        pass: 'yourpassword'
+        user: 'nileshvijay2022@gmail.com',
+        pass: 'atkz dqza lhqo sbej'
       }
     });
 
     const mailOptions = {
-      from: 'youremail@gmail.com',
+      from: 'nileshvijay2022@gmail.com',
       to: user.email,  // corrected the recipient email
       subject: 'Reset your password',
       text: `Please click on the following link, or paste this into your browser to complete the process:\n\n
@@ -94,7 +95,44 @@ const forgotPassword = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+const resetPassword = async (req, res) => {
+  const { userId, token } = req.params;
+  const { newPassword } = req.body;
 
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, "yourSecretKey");
+    if (!decoded || decoded.id !== userId) {
+      return res.status(400).json({ message: 'Invalid token or user ID' });
+    }
+
+    // Find the user by userId
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Generate salt and hash the new password
+    const salt = await bcrypt.genSalt(10); // Generate a salt with 10 rounds
+    const hashedPassword = await bcrypt.hash(newPassword, salt); // Hash newPassword using the generated salt
+    
+    // Update user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    // Respond with success message
+    return res.status(200).json({ message: 'Password reset successful' });
+  } catch (error) {
+    // Handle JWT errors
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(400).json({ message: 'Invalid token' });
+    } else if (error.name === 'TokenExpiredError') {
+      return res.status(400).json({ message: 'Token expired' });
+    }
+    // Handle other errors
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 const getAllvisitors = (req,res)=>{
      UserModel.find({})
@@ -147,6 +185,7 @@ module.exports={
   forgotPassword,
   getAllvisitors,
   deleteUserById,
+  resetPassword,
   updateUserRole
 }
 

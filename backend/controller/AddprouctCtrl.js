@@ -1,4 +1,5 @@
 const ProductModel = require('../model/ProductModel');
+const cartModel = require('../model/CartModel'); // Import cartModel
 
 const IMG_BASE_URL = 'http://localhost:8080/';
 
@@ -41,7 +42,6 @@ const getProductById = async (req, res) => {
     }
 };
 
-
 const deleteProductById = async (req, res) => {
     try {
         const delProduct = await ProductModel.findByIdAndDelete(req.params.id);
@@ -54,9 +54,11 @@ const deleteProductById = async (req, res) => {
     }
 };
 
+
 module.exports = {
     addProduct,
     getAllProducts,
     getProductById,
     deleteProductById
+  
 };

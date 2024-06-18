@@ -17,6 +17,8 @@ import CarousalFilter from './components/Carousalfilter';
 import ProductInformation from './components/ProductInformation';
 import Cart from './components/Cart';
 import CartProvider from './components/CartProvider'; // Import CartProvider
+import ForgotPassword from './components/Forgotpassoword';
+import ResetPassword from './components/ResetPassword';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
                 <Route path='/register' element={<Register />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/logout' element={<Logout />} />
+                <Route path = '/forgot' element={<ForgotPassword/>}></Route>
+                <Route path='/reset-password/:userId/:token' element={<ResetPassword />} />
                 <Route path='/' element={<Home />} />
                 <Route path='/banner' element={<Banner />} />
                 <Route path='/kids' element={

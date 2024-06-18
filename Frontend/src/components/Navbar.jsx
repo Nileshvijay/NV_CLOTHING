@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
+import { jwtDecode } from "jwt-decode";
 import logo from '../assets/NV.png';
 import profile from '../assets/profile.ico';
 import wishlist from '../assets/wishlist.ico';
@@ -12,23 +13,20 @@ import myntra from '../assets/myntra-coupons.jpg';
 const Navbar = () => {
   const offcanvasRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleBackdropClick = (event) => {
-    if (event.target === event.currentTarget) {
-      offcanvasRef.current.classList.remove('show');
-    }
-  };
-
-  const handleMouseEnter = () => {
-    setIsMenuOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsMenuOpen(false);
-  };
-
+  const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate(); // React Router hook to programmatically navigate
-  const isAuthenticated = !!localStorage.getItem('token'); // Check if token is in local storage
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setUserRole(decodedToken.role);
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []);
 
   const handleLogout = async () => {
     // Remove token from local storage
@@ -44,6 +42,7 @@ const Navbar = () => {
 
       if (response.ok) {
         navigate('/login');
+        window.location.reload();
       } else {
         console.error('Failed to log out');
       }
@@ -51,6 +50,22 @@ const Navbar = () => {
       console.error('Error logging out:', error);
     }
   };
+
+  const handleBackdropClick = (event) => {
+    if (event.target === event.currentTarget) {
+      offcanvasRef.current.classList.remove('show');
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setIsMenuOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsMenuOpen(false);
+  };
+
+  const isAuthenticated = !!localStorage.getItem('token'); // Check if token is in local storage
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -89,17 +104,17 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li className="nav-item" style={{ marginRight: '20px' }}>
-              <NavLink to="/home-living" className="nav-link fw-bold" style={{ fontSize: '13px' }}>
+              <NavLink to="/" className="nav-link fw-bold" style={{ fontSize: '13px' }}>
                 HOME & LIVING
               </NavLink>
             </li>
             <li className="nav-item" style={{ marginRight: '20px' }}>
-              <NavLink to="/beauty" className="nav-link fw-bold" style={{ fontSize: '13px' }}>
+              <NavLink to="/" className="nav-link fw-bold" style={{ fontSize: '13px' }}>
                 BEAUTY
               </NavLink>
             </li>
             <li className="nav-item" style={{ position: 'relative', textAlign: 'right', marginRight: '20px' }}>
-              <NavLink to="/studio" className="nav-link fw-bold" style={{ fontSize: '13px', position: 'relative', left: '0' }}>
+              <NavLink to="/" className="nav-link fw-bold" style={{ fontSize: '13px', position: 'relative', left: '0' }}>
                 STUDIO
                 <span style={{ position: 'absolute', top: '5px', right: '-14px', color: '#FF1493', fontSize: '9px' }}>
                   <strong>NEW</strong>
@@ -124,7 +139,7 @@ const Navbar = () => {
                   <span style={{ fontSize: '10px', cursor: 'pointer', display: 'block' }}>Profile</span>
                 </div>
                 {isMenuOpen && (
-                  <ul className="menu-items" style={{ width: '250px', height: '500px', position: 'absolute', top: '60px', left: '-100px' }}>
+                  <ul className="menu-items" style={{ width: '250px', height: 'auto', position: 'absolute', top: '60px', left: '-100px', padding: '10px' }}>
                     <p style={{ margin: '0', padding: '5px 10px' }}>
                       <strong style={{ fontSize: '14px' }}>Welcome</strong><br />
                       <span style={{ fontSize: '13px' }}>To access account and manage orders</span>
@@ -137,11 +152,12 @@ const Navbar = () => {
                         <NavLink to="/register" className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>SIGNUP</NavLink>
                       </>
                     )}
-                    <NavLink to="/admindashboard" className="btn btn-outline-primary" style={{ marginLeft: '10px', padding: '5px' }}>AdminDashboard</NavLink>
+                    {userRole === 'admin' && (
+                      <NavLink to="/admindashboard" className="btn btn-outline-primary" style={{ marginLeft: '10px', padding: '5px' }}>AdminDashboard</NavLink>
+                    )}
                     <NavLink to="/cart" style={{ marginLeft: '10px', padding: '5px' }}>
                       <button className="btn product-info-add-to-cart-btn mt-4">
                         <FontAwesomeIcon icon={faCartPlus} className="cart-icon" style={{ fontSize: '30px' }} />
-
                       </button>
                     </NavLink>
                   </ul>

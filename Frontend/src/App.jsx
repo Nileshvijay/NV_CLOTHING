@@ -19,10 +19,12 @@ import Cart from './components/Cart';
 import CartProvider from './components/CartProvider'; // Import CartProvider
 import ForgotPassword from './components/Forgotpassoword';
 import ResetPassword from './components/ResetPassword';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
     <div className='app'>
+      <ToastContainer /> 
       <ProductProvider>
         <CBProvider>
           <CartProvider> {/* Wrap everything with CartProvider */}

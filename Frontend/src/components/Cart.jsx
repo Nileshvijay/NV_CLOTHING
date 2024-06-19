@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { CartContext } from './CartProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 const Cart = () => {
-  const { cart } = useContext(CartContext);
+  const { cart, incrementQuantity, decrementQuantity } = useContext(CartContext);
 
   const calculateTotal = () => {
     return cart.reduce((acc, item) => {
@@ -24,6 +24,16 @@ const Cart = () => {
   const shippingCharge = 10;
   const tax = 2.50;
   const grandTotal = total - discount + shippingCharge + tax;
+
+  const handleIncrement = async (productId) => {
+    await incrementQuantity(productId);
+    window.location.reload();
+  };
+
+  const handleDecrement = async (productId) => {
+    await decrementQuantity(productId);
+    window.location.reload();
+  };
 
   return (
     <div className="cart-dashboard">
@@ -48,7 +58,15 @@ const Cart = () => {
                   </td>
                   <td>{item.productId.name}<br />{item.productId.description}</td>
                   <td>${item.productId.price}</td>
-                  <td>{item.quantity}</td>
+                  <td>
+                    <button onClick={() => handleDecrement(item.productId._id)} disabled={item.quantity <= 1}>
+                      <FontAwesomeIcon icon={faMinus} />
+                    </button>
+                    {item.quantity}
+                    <button onClick={() => handleIncrement(item.productId._id)}>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                  </td>
                   <td>${item.productId.price * item.quantity}</td>
                   <td>
                     <button className="remove-btn" disabled>

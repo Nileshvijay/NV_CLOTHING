@@ -30,8 +30,54 @@ const CartProvider = ({ children }) => {
     fetchCart();
   }, []);
 
+  const incrementQuantity = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('User not authenticated');
+      }
+
+      const response = await axios.put(
+        `http://localhost:8080/api/cart/increment/${productId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      updateCart(response.data.cart.items);
+    } catch (error) {
+      console.error('Failed to increment quantity:', error);
+    }
+  };
+
+  const decrementQuantity = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('User not authenticated');
+      }
+
+      const response = await axios.put(
+        `http://localhost:8080/api/cart/decrement/${productId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      updateCart(response.data.cart.items);
+    } catch (error) {
+      console.error('Failed to decrement quantity:', error);
+    }
+  };
+
   return (
-    <CartContext.Provider value={{ cart, updateCart }}>
+    <CartContext.Provider value={{ cart, updateCart, incrementQuantity, decrementQuantity }}>
       {children}
     </CartContext.Provider>
   );

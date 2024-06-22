@@ -35,24 +35,25 @@ const getCart = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 // Increment quantity of a cart item
 const incrementCartItem = async (req, res) => {
   const { productId } = req.params;
   try {
-      const cart = await Cart.findOneAndUpdate(
-          { userId: req.user.userId, 'items.productId': productId },
-          { $inc: { 'items.$.quantity': 1 } },
-          { new: true }
-      ).populate('items.productId');
+    const cart = await Cart.findOneAndUpdate(
+      { userId: req.user.userId, 'items.productId': productId },
+      { $inc: { 'items.$.quantity': 1 } },
+      { new: true }
+    ).populate('items.productId');
 
-      if (!cart) {
-          return res.status(404).json({ message: 'Item not found in cart' });
-      }
+    if (!cart) {
+      return res.status(404).json({ message: 'Item not found in cart' });
+    }
 
-      res.status(200).json({ message: 'Item quantity incremented', cart });
+    res.status(200).json({ message: 'Item quantity incremented', cart });
   } catch (error) {
-      console.error('Error incrementing quantity:', error);
-      res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    console.error('Error incrementing quantity:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
 
@@ -60,29 +61,55 @@ const incrementCartItem = async (req, res) => {
 const decrementCartItem = async (req, res) => {
   const { productId } = req.params;
   try {
-      const cart = await Cart.findOne({ userId: req.user.userId, 'items.productId': productId });
+    const cart = await Cart.findOne({ userId: req.user.userId, 'items.productId': productId });
 
-      if (!cart) {
-          return res.status(404).json({ message: 'Item not found in cart' });
-      }
+    if (!cart) {
+      return res.status(404).json({ message: 'Item not found in cart' });
+    }
 
-      const item = cart.items.find(item => item.productId.toString() === productId);
-      if (item.quantity <= 1) {
-          return res.status(400).json({ message: 'Cannot decrease quantity below 1' });
-      }
+    const item = cart.items.find(item => item.productId.toString() === productId);
+    if (item.quantity <= 1) {
+      return res.status(400).json({ message: 'Cannot decrease quantity below 1' });
+    }
 
-      item.quantity -= 1;
-      await cart.save();
+    item.quantity -= 1;
+    await cart.save();
 
-      res.status(200).json({ message: 'Item quantity decremented', cart });
+    res.status(200).json({ message: 'Item quantity decremented', cart });
   } catch (error) {
-      console.error('Error decrementing quantity:', error);
-      res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    console.error('Error decrementing quantity:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
+
+// Delete item from cart
+const deleteCartItem = async (req, res) => {
+  const { productId } = req.params;
+  try {
+    const cart = await Cart.findOne({ userId: req.user.userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+    const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
+    if (itemIndex > -1) {
+      cart.items.splice(itemIndex, 1);
+      await cart.save();
+      return res.status(200).json({ message: 'Item removed from cart', cart });
+    } else {
+      return res.status(404).json({ message: 'Item not found in cart' });
+    }
+  } catch (error) {
+    console.error('Error removing item from cart:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+};
+
 module.exports = {
   addToCart,
   getCart,
   incrementCartItem,
-  decrementCartItem
+  decrementCartItem,
+  deleteCartItem
 };

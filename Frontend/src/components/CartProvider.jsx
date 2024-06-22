@@ -76,8 +76,30 @@ const CartProvider = ({ children }) => {
     }
   };
 
+  const deleteProduct = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('User not authenticated');
+      }
+
+      const response = await axios.delete(
+        `http://localhost:8080/api/cart/delete/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      updateCart(response.data.cart.items);
+    } catch (error) {
+      console.error('Failed to delete product:', error);
+    }
+  };
+
   return (
-    <CartContext.Provider value={{ cart, updateCart, incrementQuantity, decrementQuantity }}>
+    <CartContext.Provider value={{ cart, updateCart, incrementQuantity, decrementQuantity, deleteProduct }}>
       {children}
     </CartContext.Provider>
   );

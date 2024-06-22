@@ -8,21 +8,49 @@ function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [mobile, setMobile] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [mobileError, setMobileError] = useState('');
     const navigate = useNavigate();
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validateMobile = (mobile) => {
+        const mobileRegex = /^\d{10}$/;
+        return mobileRegex.test(mobile);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        let valid = true;
+
+        if (!validateEmail(email)) {
+            setEmailError('Please enter a valid email address.');
+            valid = false;
+        } else {
+            setEmailError('');
+        }
+
+        if (!validateMobile(mobile)) {
+            setMobileError('Mobile number must be exactly 10 digits.');
+            valid = false;
+        } else {
+            setMobileError('');
+        }
+
+        if (!valid) return;
 
         const formData = { name, age, email, mobile, password };
         axios.post("http://localhost:8080/api/user/register", formData)
             .then(result => {
                 console.log(result);
-                // Navigate to the login page after successful registration
                 navigate('/login');
             })
             .catch(err => {
                 console.log(err);
-                // Handle error here, e.g., show error message
             });
     };
 
@@ -41,6 +69,7 @@ function Register() {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                        {emailError && <div className="text-danger">{emailError}</div>}
                     </div>
                     <div className="mb-3">
                         <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
@@ -71,6 +100,7 @@ function Register() {
                             value={mobile}
                             onChange={(e) => setMobile(e.target.value)}
                         />
+                        {mobileError && <div className="text-danger">{mobileError}</div>}
                     </div>
                     <div className="mb-3">
                         <label htmlFor="exampleInputAge1" className="form-label">Age</label>
@@ -98,4 +128,3 @@ function Register() {
 }
 
 export default Register;
-

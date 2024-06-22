@@ -73,7 +73,9 @@ const Visitors = () => {
                             <td>
                                 <FaEdit className="edit-icon" />
                                 <FaTrash className="delete-icon" onClick={() => handleDeleteVisitor(visitor._id)} />
-                                <button onClick={() => handleMakeAdmin(visitor._id)}>Make Admin</button>
+                            
+                                      
+                                <button onClick={() => handleMakeAdmin(visitor._id)}>{ visitor.admin? 'Make Admin':'make User'}</button>
                                
                             </td>
                         </tr>

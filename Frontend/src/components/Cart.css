@@ -1,0 +1,74 @@
+/* cart dashboard */
+
+.cart-container {
+    margin-top: 20px; /* Adjust this value to control the space below the navbar */
+  }
+  
+  .card-header {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .table th, .table td {
+    vertical-align: middle;
+  }
+  
+  .cart-img {
+    object-fit: cover;
+    width: 60px;
+    height: 60px;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+  }
+  
+  .btn-primary, .btn-success, .btn-danger {
+    border-radius: 4px;
+  }
+  
+  .btn-sm {
+    margin: 0 5px;
+  }
+  
+  .alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+  }
+  
+  textarea.form-control {
+    resize: none;
+  }
+  
+  @media (max-width: 768px) {
+    .cart-container {
+      margin-top: 10px;
+    }
+  
+    .table th, .table td {
+      font-size: 0.9em;
+    }
+  
+    .cart-img {
+      width: 40px;
+      height: 40px;
+    }
+  
+    .card-header, .card-body {
+      padding: 10px;
+    }
+  
+    .btn-sm {
+      padding: 2px 5px;
+    }
+  
+    .btn-block {
+      width: 100%;
+    }
+  
+    .form-group {
+      margin-bottom: 10px;
+    }
+  }
+  

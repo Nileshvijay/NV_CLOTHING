@@ -139,28 +139,32 @@ const Navbar = () => {
                   <span style={{ fontSize: '10px', cursor: 'pointer', display: 'block' }}>Profile</span>
                 </div>
                 {isMenuOpen && (
-                  <ul className="menu-items" style={{ width: '250px', height: 'auto', position: 'absolute', top: '60px', left: '-100px', padding: '10px' }}>
-                    <p style={{ margin: '0', padding: '5px 10px' }}>
-                      <strong style={{ fontSize: '14px' }}>Welcome</strong><br />
-                      <span style={{ fontSize: '13px' }}>To access account and manage orders</span>
-                    </p>
-                    {isAuthenticated ? (
-                      <button onClick={handleLogout} className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>LOGOUT</button>
-                    ) : (
-                      <>
-                        <NavLink to="/login" className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>LOGIN</NavLink>
-                        <NavLink to="/register" className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>SIGNUP</NavLink>
-                      </>
-                    )}
-                    {userRole === 'admin' && (
-                      <NavLink to="/admindashboard" className="btn btn-outline-primary" style={{ marginLeft: '10px', padding: '5px' }}>AdminDashboard</NavLink>
-                    )}
-                    <NavLink to="/cart" style={{ marginLeft: '10px', padding: '5px' }}>
-                      <button className="btn product-info-add-to-cart-btn mt-4">
-                        <FontAwesomeIcon icon={faCartPlus} className="cart-icon" style={{ fontSize: '30px' }} />
-                      </button>
-                    </NavLink>
-                  </ul>
+                  <>
+                   
+                    <ul className="menu-items" style={{ width: '250px', height: 'auto', position: 'absolute', top: '60px', left: '-100px', padding: '10px' }}>
+                    <li>
+                        <NavLink to="/order" className="btn btn-outline-success" style={{ marginLeft: '10px', padding: '5px', display: 'block' }}>
+                          My Orders
+                        </NavLink>
+                      </li>
+                      {isAuthenticated ? (
+                        <button onClick={handleLogout} className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>LOGOUT</button>
+                      ) : (
+                        <>
+                          <NavLink to="/login" className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>LOGIN</NavLink>
+                          <NavLink to="/register" className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>SIGNUP</NavLink>
+                        </>
+                      )}
+                      {userRole === 'admin' && (
+                        <NavLink to="/admindashboard" className="btn btn-outline-primary" style={{ marginLeft: '10px', padding: '5px' }}>AdminDashboard</NavLink>
+                      )}
+                      <NavLink to="/cart" style={{ marginLeft: '10px', padding: '5px' }}>
+                        <button className="btn product-info-add-to-cart-btn mt-4">
+                          <FontAwesomeIcon icon={faCartPlus} className="cart-icon" style={{ fontSize: '30px' }} />
+                        </button>
+                      </NavLink>
+                    </ul>
+                  </>
                 )}
               </div>
             </div>

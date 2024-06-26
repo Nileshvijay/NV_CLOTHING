@@ -19,7 +19,10 @@ import Cart from './components/Cart';
 import CartProvider from './components/CartProvider'; // Import CartProvider
 import ForgotPassword from './components/Forgotpassoword';
 import ResetPassword from './components/ResetPassword';
+
+import Order from './components/Order';
 import { ToastContainer } from 'react-toastify';
+
 
 function App() {
   return (
@@ -60,13 +63,16 @@ function App() {
                 <Route path='/product/:id' element={<ProductInformation />} />
                 <Route path='/*' element={<AdminDashboard />} />
                 <Route path='/products' element={<Products />} />
-                <Route path='/cart' element={<Cart />} />
+                <Route path='/cart' element={<Cart />}  />
+                 <Route path = '/order' element = {<Order/>}/>
+             
               </Routes>
               <Fotter />
             </Router>
           </CartProvider>
         </CBProvider>
       </ProductProvider>
+      
     </div>
   );
 }

@@ -75,7 +75,7 @@ const Visitors = () => {
                                 <FaTrash className="delete-icon" onClick={() => handleDeleteVisitor(visitor._id)} />
                             
                                       
-                                <button onClick={() => handleMakeAdmin(visitor._id)}>{ visitor.admin? 'Make Admin':'make User'}</button>
+                                <button onClick={() => handleMakeAdmin(visitor._id)}>{ visitor.admin? 'Make Admin':'Make User'}</button>
                                
                             </td>
                         </tr>

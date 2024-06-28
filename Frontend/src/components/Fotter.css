@@ -2,7 +2,7 @@
     background-color: #000;
     color: #ddd;
     padding: 40px 0;
-    margin-top: 40px;
+ 
   }
   
   .footer h4 {
@@ -58,8 +58,9 @@
   }
   
   .footer-logo {
-    width: 150px;
-    height: auto;
+    width: 800px; /* Increased width */
+    max-width: 100%; /* Ensures it doesn't exceed container's width */
+    height: 100px;
   }
   
   .social-icons .list-inline-item {

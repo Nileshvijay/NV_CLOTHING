@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import logo from '../assets/line1/cover.png'
 import './Fotter.css';
 
 const Footer = () => {
@@ -42,12 +43,11 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <hr />
         <div className="row">
           <div className="col-md-6 text-left">
-            <img src="/path/to/your/logo.png" alt="NV Clothings Logo" className="footer-logo" />
+            <img src= {logo} alt="NV Clothings Logo" className="footer-logo" />
           </div>
-          <div className="col-md-6 text-right">
+          <div className="col-md-6 text-right pt-4">
             <p>&copy; 2024 NV Clothings. All rights reserved.</p>
           </div>
         </div>

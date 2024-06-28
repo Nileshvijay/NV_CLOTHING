@@ -17,8 +17,11 @@ import CarousalFilter from './components/Carousalfilter';
 import ProductInformation from './components/ProductInformation';
 import Cart from './components/Cart';
 import CartProvider from './components/CartProvider'; // Import CartProvider
+import OrderProvider from './components/OrderProvider';
 import ForgotPassword from './components/Forgotpassoword';
 import ResetPassword from './components/ResetPassword';
+
+
 
 import Order from './components/Order';
 import { ToastContainer } from 'react-toastify';
@@ -27,52 +30,57 @@ import { ToastContainer } from 'react-toastify';
 function App() {
   return (
     <div className='app'>
-      <ToastContainer /> 
+      <ToastContainer />
       <ProductProvider>
         <CBProvider>
-          <CartProvider> {/* Wrap everything with CartProvider */}
-            <Router>
-              <Navbar />
-              <Routes>
-                <Route path='/register' element={<Register />} />
-                <Route path='/login' element={<Login />} />
-                <Route path='/logout' element={<Logout />} />
-                <Route path = '/forgot' element={<ForgotPassword/>}></Route>
-                <Route path='/reset-password/:userId/:token' element={<ResetPassword />} />
-                <Route path='/' element={<Home />} />
-                <Route path='/banner' element={<Banner />} />
-                <Route path='/kids' element={
-                  <>
-                    <CarousalFilter category="kids" />
-                    <Products category="kids" />
-                  </>
-                } />
-                <Route path='/men' element={
-                  <>
-                    <CarousalFilter category="men" />
-                    <Products category="men" />
-                  </>
-                } />
-                <Route path='/women' element={
-                  <>
-                    <CarousalFilter category="women" />
-                    <Products category="women" />
-                  </>
-                } />
-                <Route path='/productcard' element={<ProductCard />} />
-                <Route path='/product/:id' element={<ProductInformation />} />
-                <Route path='/*' element={<AdminDashboard />} />
-                <Route path='/products' element={<Products />} />
-                <Route path='/cart' element={<Cart />}  />
-                 <Route path = '/order' element = {<Order/>}/>
-             
-              </Routes>
-              <Fotter />
-            </Router>
+          <CartProvider>
+            <OrderProvider>
+              <Router>
+                <Navbar />
+                <Routes>
+                  <Route path='/register' element={<Register />} />
+                  <Route path='/login' element={<Login />} />
+                  <Route path='/logout' element={<Logout />} />
+                  <Route path='/forgot' element={<ForgotPassword />}></Route>
+                  <Route path='/reset-password/:userId/:token' element={<ResetPassword />} />
+                  <Route path='/' element={<Home />} />
+                  <Route path='/banner' element={<Banner />} />
+                  <Route path='/kids' element={
+                    <>
+                      <CarousalFilter category="kids" />
+                      <Products category="kids" />
+                    </>
+                  } />
+                  <Route path='/men' element={
+                    <>
+                      <CarousalFilter category="men" />
+                      <Products category="men" />
+                    </>
+                  } />
+                  <Route path='/women' element={
+                    <>
+                      <CarousalFilter category="women" />
+                      <Products category="women" />
+                    </>
+                  } />
+                  <Route path='/productcard' element={<ProductCard />} />
+                  <Route path='/product/:id' element={<ProductInformation />} />
+                  <Route path='/*' element={<AdminDashboard />} />
+                  <Route path='/products' element={<Products />} />
+                  <Route path='/cart' element={<Cart />} />
+                  <Route path='/order' element={<Order />} />
+
+              
+
+                 
+                </Routes>
+                <Fotter />
+              </Router>
+            </OrderProvider>
           </CartProvider>
         </CBProvider>
       </ProductProvider>
-      
+
     </div>
   );
 }

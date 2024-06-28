@@ -99,7 +99,7 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li className="nav-item" style={{ marginRight: '20px' }}>
-              <NavLink to="/kids" className="nav-link fw-bold" style={{ fontSize: '13px' }}>
+              <NavLink to="/ordersu" className="nav-link fw-bold" style={{ fontSize: '13px' }}>
                 KIDS
               </NavLink>
             </li>
@@ -109,7 +109,7 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li className="nav-item" style={{ marginRight: '20px' }}>
-              <NavLink to="/" className="nav-link fw-bold" style={{ fontSize: '13px' }}>
+              <NavLink to="/orderconfirm" className="nav-link fw-bold" style={{ fontSize: '13px' }}>
                 BEAUTY
               </NavLink>
             </li>
@@ -142,11 +142,11 @@ const Navbar = () => {
                   <>
                    
                     <ul className="menu-items" style={{ width: '250px', height: 'auto', position: 'absolute', top: '60px', left: '-100px', padding: '10px' }}>
-                    <li>
+                    
                         <NavLink to="/order" className="btn btn-outline-success" style={{ marginLeft: '10px', padding: '5px', display: 'block' }}>
                           My Orders
                         </NavLink>
-                      </li>
+                      
                       {isAuthenticated ? (
                         <button onClick={handleLogout} className="btn btn-outline-danger" style={{ marginLeft: '10px', padding: '5px' }}>LOGOUT</button>
                       ) : (

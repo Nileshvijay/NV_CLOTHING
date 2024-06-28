@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from 'react-toastify';
 import { CartContext } from './CartProvider'; // Adjust the import path as needed
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import './ProductCard.css'; // Import your CSS file for styling
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -45,6 +47,8 @@ const ProductCard = ({ product }) => {
 
     } catch (error) {
       console.error('Error adding to cart:', error);
+      // Show error toast notification if adding to cart fails
+      toast.error('Failed to add item to cart. Please try again.');
     }
   };
 
@@ -56,13 +60,12 @@ const ProductCard = ({ product }) => {
         <p className="card-text product-description">{product.description}</p>
         <div className="d-flex justify-content-between align-items-center">
           <div>
-            <p className="card-text mb-0"><strong>Rating:</strong> {product.rating}</p>
+            <p className="card-text mb-0"><FontAwesomeIcon icon={faStar} className="text-warning" /> {product.rating}</p>
             <p className="card-text"><strong>Price:</strong> ${product.price}</p>
           </div>
           <button className="btn btn-primary add-to-cart-btn" onClick={handleAddToCart}>Add to Cart</button>
         </div>
       </div>
-      <ToastContainer /> {/* Ensure ToastContainer is included at the root level */}
     </div>
   );
 };

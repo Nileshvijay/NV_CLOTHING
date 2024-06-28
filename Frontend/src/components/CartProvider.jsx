@@ -98,11 +98,31 @@ const CartProvider = ({ children }) => {
     }
   };
 
+  const clearCart = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('User not authenticated');
+      }
+
+      await axios.delete('http://localhost:8080/api/cart/clear', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setCart([]); // Clear the cart state
+    } catch (error) {
+      console.error('Failed to clear cart:', error);
+    }
+  };
+
   return (
-    <CartContext.Provider value={{ cart, updateCart, incrementQuantity, decrementQuantity, deleteProduct }}>
+    <CartContext.Provider value={{ cart, updateCart, incrementQuantity, decrementQuantity, deleteProduct, clearCart }}>
       {children}
     </CartContext.Provider>
   );
 };
 
 export default CartProvider;
+

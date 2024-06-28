@@ -6,8 +6,9 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const Authrouter = require('./routes/Authroute');
 const productrouter = require('./routes/Productsroute');
-const bannerroute = require('./routes/Bannerroute')
-const Cartrouter =require('../backend/routes/Cartroute')
+const bannerroute = require('./routes/Bannerroute');
+const Cartrouter = require('./routes/Cartroute');
+const Orderrouter = require('./routes/Orderroute');
 const connection = require('./database/DbConnect'); // Ensure this connects to your database
 
 dotenv.config();
@@ -34,7 +35,8 @@ app.use(express.static('public/Images'));
 app.use("/api/user", Authrouter);
 app.use('/api/product', productrouter);
 app.use('/api/banner', bannerroute);
-app.use('/api/cart',Cartrouter)
+app.use('/api/cart', Cartrouter);
+app.use('/api/orders', Orderrouter); // Corrected route path
 
 // Database connection
 connection();
